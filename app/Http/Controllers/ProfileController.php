@@ -41,7 +41,7 @@ class ProfileController extends Controller
         Profile::create($validated);
 
         alert()->success('Create Success');
-        return redirect()->route('profile.index');
+        return redirect()->route('profiles.index');
     }
 
     public function edit($id)
@@ -85,7 +85,7 @@ class ProfileController extends Controller
         $profile->update($validated);
 
         alert()->success('Update Success');
-        return redirect()->route('profile.index');
+        return redirect()->route('profiles.index');
     }
 
     public function destroy(Profile $profile)
@@ -100,6 +100,6 @@ class ProfileController extends Controller
         $profile->delete($profile->id);
 
         alert()->success('Delete Success');
-        return redirect()->route('profile.index');
+        return redirect()->route('profiles.index');
     }
 }

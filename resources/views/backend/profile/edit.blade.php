@@ -17,7 +17,7 @@ Profile
                 <div class="card">
                     <div class="card-header">
                         <div class="pull-right">
-                            <a class="btn btn-danger" href="{{ route('profile.index') }}"> Back</a>
+                            <a class="btn btn-danger" href="{{ route('profiles.index') }}"> Back</a>
                         </div>
                         @if ($errors->any())
                         <div class="alert alert-danger">
@@ -34,7 +34,7 @@ Profile
                     <div class="card-body">
 
 
-                        <form action="{{ route('profile.update',$profile->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('profiles.update',$profile->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             @method('PUT')

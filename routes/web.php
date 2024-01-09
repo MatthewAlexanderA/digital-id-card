@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AddToContactController;
+use App\Http\Controllers\HeroController;
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
@@ -21,19 +22,13 @@ use Illuminate\Auth\Events\Logout;
 |
 */
 
-Route::get('/', function () { return view('frontend.matthew'); });
-Route::get('/matthew', function () { return view('frontend.matthew'); });
-Route::get('/agus', function () { return view('frontend.agus'); });
-Route::get('/aqib', function () { return view('frontend.aqib'); });
-Route::get('/hanez', function () { return view('frontend.hanez'); });
-Route::get('/ridho', function () { return view('frontend.ridho'); });
-
+Route::get('profile/{slug}', [HeroController::class, 'hero'])->name('profile');
 Route::post('add-to-contact', [AddToContactController::class, 'addToContact'])->name('add-to-contact');
 
 Route::middleware(['auth'])->group(function () { 
     Route::resource('dashboard', DashboardController::class);
     Route::resource('setting', SettingController::class);
-    Route::resource('profile', ProfileController::class);
+    Route::resource('profiles', ProfileController::class);
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 

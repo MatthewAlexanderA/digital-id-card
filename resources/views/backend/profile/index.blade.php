@@ -49,9 +49,9 @@ profile
                                                 <td>{{ $profile->job }}</td>
 
                                                 <td>
-                                                    <form action="{{ route('profile.destroy',$profile->id) }}" method="POST">
-                                                        <a class="btn btn-warning" href="#" target="_blank">View</a>
-                                                        <a class="btn btn-primary" href="{{ route('profile.edit',$profile->id) }}">Edit</a>
+                                                    <form action="{{ route('profiles.destroy',$profile->id) }}" method="POST">
+                                                        <a class="btn btn-warning" href="{{ route('profile',$profile->slug) }}" target="_blank">View</a>
+                                                        <a class="btn btn-primary" href="{{ route('profiles.edit',$profile->id) }}">Edit</a>
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-danger"
@@ -104,7 +104,7 @@ profile
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
-                                <form action="{{ route('profile.store') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('profiles.store') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
 
                                     <div class="row">

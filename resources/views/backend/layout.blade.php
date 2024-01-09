@@ -106,7 +106,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a href="{{ route('profile.index') }}" class="nav-link @yield('profile')">
+                            <a href="{{ route('profiles.index') }}" class="nav-link @yield('profile')">
                                 <i class="fa-solid fa-user"></i>
                                 <p>
                                     Profile
