@@ -2,246 +2,176 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome, {{ Auth::user()->username }}</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/dist/css/adminlte.min.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
-
-    {{-- Data Table --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/67b6ece322.js" crossorigin="anonymous"></script>
 
-    <!-- CKeditor -->
-    <script src="https://cdn.ckeditor.com/4.16.2/full/ckeditor.js"></script>
+    {{-- Data Table --}}
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
 
+
+    <style>
+        body {
+            overflow-x: hidden;
+            /* Hide horizontal scrollbar */
+        }
+        /* DataTables */
+        @media screen and (max-width: 640px) {
+            table.dataTable {
+                width: 100% !important;
+                margin: 0 auto;
+            }
+
+            table.dataTable thead th,
+            table.dataTable tbody td {
+                white-space: nowrap;
+            }
+        }
+    </style>
+    @vite('resources/css/app.css')
 </head>
 
-<body class="hold-transition sidebar-mini">
+<body class="font-sans bg-slate-100 flex flex-col min-h-screen">
     @include('sweetalert::alert')
+    <!-- Navigation Bar -->
+    <nav class="bg-white flex justify-between shadow-sm">
+        <button id="toggleSidebar" class="text-white focus:outline-none bg-[#343a40] p-4 w-14 lg:w-16 lg:fixed lg:border-b-2 lg:border-[#494e52]">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+        <div></div>
+        <div class="p-4 lg:mr-2 border-b-2">
+            <div class="relative inline-block text-left">
+                <button id="dropdown-button" type="button"
+                    class="inline-flex items-center px-2 lg:px-4 text-sm font-bold rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600">
+                    <i class="fa-solid fa-user mr-1"></i> {{ Auth::user()->username }}
+                </button>
 
-    <!-- Site wrapper -->
-    <div class="wrapper">
-        <!-- Navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-                </li>
-            </ul>
-
-            <div class="ml-3"><b>@yield('title')</b></div>
-
-            <!-- Right navbar links -->
-            <ul class="navbar-nav ml-auto">
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user"></i> {{ Auth::user()->username }}
+                <div id="dropdown-menu"
+                    class="hidden origin-top-right absolute right-0 mt-2 w-32 lg:w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-30">
+                    <div class="py-2 lg:py-4 px-4 text-sm font-semibold text-gray-700 text-center">
+                        <i class="fa-solid fa-user mr-1"></i> <br>
+                        {{ Auth::user()->username }}
+                    </div>
+                    <div class="border-t border-gray-200"></div>
+                    <a href="{{ route('setting.index') }}" class="block px-4 py-2 lg:py-3 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        role="menuitem">
+                        <i class="fa-solid fa-user-pen mr-1"></i> Edit Profile
                     </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <div class="text-center">
-                            <i class="fa fa-user"></i> <br>
-                            {{ Auth::user()->username }}
-                        </div>
-                        <div class="dropdown-divider"></div>
-                        <a href="/" class="dropdown-item">Home</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="{{ route('setting.index') }}" class="dropdown-item">Edit Profile</a>
-                        <div class="dropdown-divider"></div>
-                        <form action="{{ route('logout') }}" method="post">
-                            @csrf
-                            <button style="border: 0; background-color: white;" type="submit" class="dropdown-item"
-                                aria-current="page">Logout</button>
-                        </form>
-                    </div>
-                </li>
-
-            </ul>
-        </nav>
-        <!-- /.navbar -->
-
-        <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
-
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- Sidebar user (optional) -->
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex" >
-                    <div class="info" style="color: white;">
-                        <b>Back</b>End
-                        {{-- <img src="{{ asset('assets/images/logo.png') }}" alt="" style="width: 95%; height: 95%; object-fit: cover;"> --}}
-                    </div>
-                </div>
-
-                <!-- Sidebar Menu -->
-                <nav class="mt-2">
-                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                        data-accordion="false">
-                        <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-
-                        <li class="nav-item">
-                            <a href="{{ route('dashboard.index') }}" class="nav-link @yield('dashboard')">
-                                <i class="fa-solid fa-gauge-high"></i>
-                                <p>
-                                    Dashboard
-                                </p>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('profiles.index') }}" class="nav-link @yield('profile')">
-                                <i class="fa-solid fa-user"></i>
-                                <p>
-                                    Profile
-                                </p>
-                            </a>
-                        </li>
-
-                    </ul>
-                </nav>
-                <!-- /.sidebar-menu -->
-            </div>
-            <!-- /.sidebar -->
-        </aside>
-
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div id="content">
-                <br>
-                <div class="container">
-
-                    <section class="content">
-                        @yield('content')
-                    </section>
-
+                    <form action="{{ route('logout') }}" method="post" class="block px-4 py-2 lg:py-3 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                        @csrf
+                        <button type="submit">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+                        </button>
+                    </form>
                 </div>
             </div>
-
         </div>
-        <!-- /.content-wrapper -->
+    </nav>
 
-        <footer class="main-footer">
-            <div class="float-right d-none d-sm-block">
-                <b>Created by <a target="_blank" href="https://github.com/MatthewAlexanderA"> Matthew Alexander</a></b>
+    <!-- Sidebar -->
+    <div id="sidebar"
+        class="h-screen w-52 lg:w-64 bg-[#343a40] text-white fixed top-0 left-0 transform -translate-x-full transition-transform ease-in-out duration-300 z-30">
+        <!-- Close button -->
+        <button id="closeSidebar" class="text-white absolute top-4 right-4 focus:outline-none">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <!-- Sidebar Content -->
+        <ul class="p-4">
+            <li><a href="#" class="block text-white"><span class="font-bold">Back</span>End</a></li>
+        </ul>
+        <div class="border-t border-[#494e52] mx-2"></div>
+        <ul class="p-4">
+            <li><a href="{{ route('dashboard.index') }}" class="block mb-1 text-white py-2 px-4 rounded-md bg-blue-500"><i class="fa-solid fa-gauge-high mr-1"></i> Dashboard</a></li>
+            <li><a href="{{ route('profiles.index') }}" class="block mb-1 text-white py-2 px-4 rounded-md hover:bg-[#494e52]"><i class="fa-solid fa-user mr-1"></i> Profile</a></li>
+        </ul>
+    </div>
+
+    <div class="relative">
+        <div id="iconToggle" class="absolute inset-0 w-14 lg:w-16 hidden lg:block z-20">
+            <div class="h-screen fixed bg-[#343a40] ">
+                <div class="border-t border-[#494e52]"></div>
+                <ul class="py-4 px-3">
+                    <li><a href="{{ route('dashboard.index') }}" class="block mb-1 text-white py-2 px-3 rounded-md bg-blue-500"><i class="fa-solid fa-gauge-high"></i></a></li>
+                    <li><a href="{{ route('profiles.index') }}" class="block mb-1 text-white py-2 px-3 rounded-md hover:bg-[#494e52]"><i class="fa-solid fa-user"></i></a></li>
+                </ul>
             </div>
-            <strong>2024 &copy; Matthew Alexander.</strong>
-        </footer>
+        </div>
+
+        <!-- Page Content -->
+        <div id="content" class="ml-0 p-8 transition-transform ease-in-out duration-300">
+            <div id="marginToggle" class="lg:ml-16 z-10">
+                <!-- Your page content goes here -->
+                @yield('content')
+            </div>
+        </div>
 
     </div>
-    <!-- ./wrapper -->
 
-    <!-- jQuery -->
-    <script src="{{ asset('assets/admin/plugins/jquery/jquery.min.js') }}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('assets/admin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset('assets/admin/dist/js/adminlte.min.js') }}"></script>
+    <footer class="mt-auto text-right bg-white text-[#8690a6] p-4 border-t border-[#dee2e6]">
+        <p>&copy; 2024 <a href="https://github.com/MatthewAlexanderA" target="_blank" class="font-bold">Matthew Alexander</a>. All rights reserved.</p>
+    </footer>
 
-    <!-- DataTables  & Plugins -->
-    <script src="{{ asset('assets/admin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/jszip/jszip.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/pdfmake.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/pdfmake/vfs_fonts.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- JavaScript to toggle sidebar -->
+    <script>
+        const toggleSidebarBtn = document.getElementById('toggleSidebar');
+        const closeSidebarBtn = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const content = document.getElementById('content');
+        const margin = document.getElementById('marginToggle');
+        // const icon = document.getElementById('iconToggle');
 
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+            content.classList.toggle('lg:ml-64');
+            margin.classList.remove('lg:ml-16');
+            // icon.classList.remove('lg:block');
+        });
+
+        closeSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.add('-translate-x-full');
+            content.classList.remove('lg:ml-64');
+            margin.classList.add('lg:ml-16');
+            // icon.classList.add('lg:block');
+        });
+
+    </script>
+
+    {{-- Dropdown --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownButton = document.getElementById('dropdown-button');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+
+            dropdownButton.addEventListener('click', function () {
+                dropdownMenu.classList.toggle('hidden');
+            });
+
+            // Close the dropdown when clicking outside
+            document.addEventListener('click', function (event) {
+                if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+    {{-- DataTables --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#example').DataTable();
-        });
-
-    </script>
-
-    <!-- Page specific script -->
-    <script>
-        $(function () {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
+            $('#example').DataTable({
+                responsive: true
             });
         });
 
     </script>
-
-    <script>
-        $(function () {
-            $("#example2").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
-
-    </script>
-
-    <script>
-        document.addEventListener('trix-file-accept', function (e) {
-            e.preventDefault();
-        })
-
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
-    </script>
-
-    <!-- JAVASCRIPT -->
-    <script src="../../assets/home/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unicons.iconscout.com/release/v4.0.0/script/monochrome/bundle.js"></script>
 
 </body>
 

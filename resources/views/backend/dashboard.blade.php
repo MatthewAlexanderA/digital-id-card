@@ -1,32 +1,23 @@
 @extends('backend.layout')
 
-@section('dashboard')
-active
-@endsection
-@section('title')
-Dashboard
-@endsection
-
 @section('content')
-<h5 class="mb-2 mt-4">Data Information</h5>
 
-<div class="row">
-
-    <div class="col-lg-3 col-6">
-        <!-- small card -->
-        <div class="small-box" style="background-color: white;">
-            <div class="inner">
-                <h3>{{ $profile }}</h3>
-
-                <p>Total Profile</p>
-            </div>
-            <div class="icon">
-                <i class="fa-solid fa-user"></i>
-            </div>
-            <div class="small-box-footer"> </div>
-        </div>
-    </div>
-
+<div class="mb-4">
+    <h1 class="text-xl font-bold mb-2 lg:mx-4">Data Information</h1>
+    <hr>
 </div>
 
+<div class="mb-4 lg:mx-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="flex justify-between bg-white shadow-lg rounded border border-b-4 border-[#dee2e6] p-6 mb-5">
+            <div class="">
+                <h1 class="text-4xl font-bold mb-2">6</h1>
+                <p>Total Profile</p>
+            </div>
+            <i class="fa-solid fa-user text-[#d9d9d9] lg:text-8xl hidden lg:block"></i>
+        </div>
+    </div>
+    
+</div>
+    
 @endsection
